@@ -1,0 +1,72 @@
+"""
+---> Como o TCP é um protocolo orientado a conexao,
+antes de comecar a enviar dados cliente-servidor é 
+preciso estabelecer uma conexao. Uma parte esta ligada
+ao socket cliente e outra ao socket servidor. Quando a conecao 
+é estabelecida basta enviar o objeto  a conexao TCP por meio de 
+seu socket. Diferente da UDP que é preciso anexar o IP de destino
+do objeto antes de envia-lo ao socket 
+
+from socket import*
+
+---> O modulo socket forma a base de todas as 
+comunicacoes python, quando importamos podemos criar
+sockets dentro do programa. 
+
+serverName = "servername"
+serverPort = 1215
+
+---> A primeira linha de variavel e para oferecermos
+o IP do servidor ou nome do hospedeiro. A segunda linha 
+de variavel oferecemos a porta que estabelecemos o socket
+nesse caso 1000+215 (matricula)
+
+clientSocket = socket(AF_INET, SOCK_STREAM)
+
+---> Cria o socket do cliente chamado de clientSocket, 
+o primeiro parametro indica a rede IPv4 e o segundo indica 
+que é socket tipo TCP
+
+clientSocket.settimeout(5)
+
+---> Caso o servidor não estivesse funcionando a conexão tentaria por 
+muito tempo, já que o TCP é voltado a conexão e garante a entrega do pacote,
+com o metodo timeout limitamos o tempo de espera em 5s para continuar o cod.
+
+try:
+    clientSocket.connect((serverName, serverPort))
+    sentence = input ('Escreva uma mensagem: ')
+    clientSocket.send(sentence.encode())
+    modifiedSentence = clientSocket.recv(1024)
+    print("Servidor: ", modifiedSentence.decode())
+
+---> Entra no TRY caso não exceda os 5s do timeout.
+1*  linha estabelece a conecao previa que o protocolo
+TCP precisa, o parametro do metodo connect() é IP do lado do
+servidor. Depois dessa linha pe feito a apresentacao 
+de tres vias e a conexao TCP é estabelecida.
+2* Funcao input do python para solicitar que o usuario
+escreva uma mensagem que será enviada ao socket do servidor.
+3* Essa linha envia a variavel criada anteriormente sentence
+pelo socket do cliente e dele para conexao TCP. Diferente do modelo UDP
+que cria um pacote anexando o endereço de destino, oTCP apenas deixa os
+bytes da variavel sentence na conexao TCP e o cliente espera para receber
+os bytes do servidor.
+4*Os caracteres chegam ao servidor e são colocados na cadeia 
+modifiedSentece e ficam se acumulando até que a frase termine com um 
+caracte de enter. 
+5* Funcao print do Python para exibir a frase em maiusculo
+
+except timeout:
+    print(f'Tempo de espera esgotado, o servidor {serverName} não respondeu')
+except ConnectionRefusedError:
+        print(f'Conexão recusada: O servidor {serverName} não está funcionando na porta {serverPort}')
+
+---> Entra no EXCEPT se exceder os 5s ou caso a porta não esteja operante
+e é exibido a mensagem da funcao print. 
+
+finally:
+     clientSocket.close()
+
+---> Fecha a conexão TCP (FIN) e libera o socket. Em todos os casos ocorre.
+"""

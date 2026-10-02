@@ -1,0 +1,27 @@
+""" 
+def cifrar (texto, chave): 
+    resultado = ""
+    for caractere in texto: 
+        if "a" <= caractere <= "z":
+            base = ord ("a")
+        elif "A" <= caractere <= "Z":
+            base = ord ("A")
+        else:
+            resultado += caractere
+            continue
+        resultado += chr ((ord(caractere) - base + chave % 26 + base))
+    return resultado
+
+def decifrar (texto, chave): 
+    return cifrar(texto, -chave)
+
+
+---> Utilização de um codigo de criptografia simples, 
+usando a funçao definir do pytho. A criptografia
+consiste em pegar o caracte da mensagem enviada e mudar
+sua posição no alfabeto com base na chave (deve ser igual
+no server e client). Ex -> A vira B (chave 1), b vira d (chave 2)
+%26 serve para reiniciar a contagem depois do Z virá o A novamente. Decifrar 
+é cifrar com o -chave (ao contrario). São cifradas apenas letras. 
+
+"""

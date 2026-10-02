@@ -1,0 +1,49 @@
+"""
+
+from socket import *
+
+---> O modulo socket forma a base de todas as 
+comunicacoes python, quando importamos podemos criar
+sockets dentro do programa. 
+
+serverPort = 1215
+
+--->A variavel oferecemos a porta que estabelecemos o socket
+nesse caso 1000+215 (matricula)
+
+serverSocket = socket(AF_INET, SOCK_STREAM)
+
+--> Cria o socket do servidor chamado de serverSocket, 
+o primeiro parametro indica a rede IPv4 e o segundo indica 
+que é socket tipo TCP
+
+serverSocket.bind(("", serverPort))
+
+---> Linha que associa o numero da porta ao socket
+
+serverSocket.listen(1)
+
+---> Essa linha daz com que o servidor receba as requisiçoes
+de conexao TCP do cliente e o parametro (1) indica o numero maximo
+de conexoes na fila
+
+print("O servidor está ativo e operante")
+
+---> Funcao do python para exibir a mensagem na tela 
+
+while True:
+    connectionSocket, addr = serverSocket.accept()
+    sentence = connectionSocket.recv(1024).decode()
+    capitalizedSentence = sentence.upper()
+    connectionSocket.send(capitalizedSentence.encode())
+    connectionSocket.close
+
+---> Quando a conexao bate na porta o programa usa o metodo
+accept() para o serverSocket criar um novo socket no servidor, 
+chamado de connectionSocket que é dedicado ao cliente especifico.
+Cliente e servidor completam a apresentacao e cria a conexao TCP entre
+ClientSocket e connectionSocket do servidor. Depois eles podem enviar 
+bytes um para o outro por meio da conexao, com garantia de entrega e de ordem. 
+
+    
+"""

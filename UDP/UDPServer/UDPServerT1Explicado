@@ -1,0 +1,50 @@
+"""
+from socket import*
+
+---> O modulo socket forma a base de todas as 
+comunicacoes python, quando importamos podemos criar
+sockets dentro do programa. 
+
+serverPort = 1215
+
+---> Variavel oferecemos a porta que estabelecemos o socket
+nesse caso 1000+215 (matricula)
+
+serverSocket = socket(AF_INET, SOCK_DGRAM)
+
+---> Nessa linha cria-se o socket do servidor (serverSocket),
+passando o primeiro parametro AF_NET que indica que a rede
+subjacete esta usando IPv4. O segundo parametro SOCK_DGRAM
+indica que e uma socket UDP 
+
+serverSocket.bind(("", serverPort))
+
+---> Vincula o numero de porta ao socket do servidor, 
+assim quando enviado um pacote enviado uma mensagem na porta
+1215 no IP do servidor e direcionado a este socket. E o UDPserver
+entra no laco while
+
+print("O servidor está ativo e operante")
+
+---> Funcao do python que será exibida quando o servidor estiver ativo 
+
+try: 
+    while True:
+        message, clientAddress = serverSocket.recvfrom(2048)
+        modifiedMessage = message.decode().upper()
+        print(f'Recebido de {clientAddress}: {message.decode()}')
+        serverSocket.sendto(modifiedMessage.encode(),clientAddress)
+except KeyboardInterrupt:
+    print("Servidor fechado")
+finally:
+    serverSocket.close()
+
+---> While espera o objeto chegar e o coloca em em message (bytes) e o endereço (IP,Porta)
+do remente vai para ClientAddress. (2028) é o tamanho do buffer em bytes. Na segunda linha
+decode reconverte o bytes em str e o metodo uper transforma str para STR. Na terceira linha 
+o UDP não é voltado para conexao, logo precisa do IP do usuario para enviar a mensagem maiuscula.
+O Except é ativado quando o servidor é encerrado de forma limpa CRTL+C. E finally sempre será ativado 
+para fechar o servido. 
+
+"""
+

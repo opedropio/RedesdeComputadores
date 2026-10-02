@@ -1,0 +1,66 @@
+"""
+
+from socket import*
+
+---> O modulo socket forma a base de todas as 
+comunicacoes python, quando importamos podemos criar
+sockets dentro do programa. 
+
+serverName = "10.0.99.150"
+serverPort = 1215
+
+---> A primeira linha de variavel e para oferecermos
+o IP do servidor ou nome do hospedeiro. A segunda linha 
+de variavel oferecemos a porta que estabelecemos o socket
+nesse caso 1000+215 (matricula)
+
+
+clientSocket = socket(AF_INET, SOCK_DGRAM)
+
+---> Nessa linha cria-se o socket do cliente (clientSocket),
+passando o primeiro parametro AF_NET que indica que a rede
+subjacete esta usando IPv4. O segundo parametro SOCK_DGRAM
+indica que e uma conexao UDP 
+
+clientSocket.settimeout(3)
+
+---> Como o UDP não garante a entrega o metodo settimeout
+faz o cliente desistir da entrega depois de (3) segundos, assim 
+o revfrom (buffer) não fica esperando para sempre 
+
+try:
+    mensagem =  input("Escreva uma mensagem: ")
+    clientSocket.sendto(mensagem.encode(),(serverName, serverPort))
+    modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
+    print("Resposta do servidor: ", modifiedMessage.decode())
+except timeout:
+    print("O Pacote foi perdido ou servidor fora do ar ---> Servidor sem resposta")
+finally: 
+    clientSocket.close()
+
+---> Bloco TRY/EXCEPT/FINALLY para erros e exceções. Quando chega nesse bloco
+primeiro o código tenta executar o TRY se tudo estiver certo, caso tenha erro (servidor
+desligado, mensagem perdida,...) o codigo cai no except e a funcao print avisando do erro. 
+O finally executa o fechamento do socket e será executado tanto se der certo ou não.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+"""
