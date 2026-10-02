@@ -1,47 +1,168 @@
-Aplicações cliente-servidor com sockets UDP e TCP em Python. 
+# Redes de Computadores: Sockets UDP e TCP
 
-Redes de Computadores: Sockets UDP e TCP
+Primeira atividade avaliativa de Cibersegurança - UFU 2026/2.
 
-Primeira atividade avaliativa do módulo de segurança WEB (Cibersegurança, UFU, 2026/2). O repositório reúne duas aplicações cliente-servidor em Python que abrem sockets e trocam dados com os protocolos UDP e TCP, conforme as seções 2.7.1 e 2.7.2 do livro Redes de Computadores e a Internet (Kurose e Ross, 8ª ed.). A porta utilizada é a 1215 (1000 + 3 últimos dígitos da matrícula).
+Este repositório contém duas aplicações cliente-servidor desenvolvidas em Python para demonstrar comunicação utilizando os protocolos UDP e TCP, conforme o conteúdo de programação de sockets estudado em Kurose e Ross.
 
-Objetivos
-Consolidar conhecimentos em programação e desenvolvimento seguro.
-Aplicar conceitos de segurança da informação e cibersegurança, como cifragem de mensagens, timeouts e tratamento de entradas inesperadas.
-Compreender na prática a diferença entre comunicação sem conexão (UDP) e orientada a conexão (TCP).
-Documentar a evolução acadêmica e prática durante a graduação.
-Manter um portfólio organizado dos projetos desenvolvidos.
-Conteúdo
-Aplicação UDP (UDP/UDPServerT1.py e UDP/UDPClientT1.py)
-Socket SOCK_DGRAM, bind na porta 1215, recvfrom e sendto.
-O servidor devolve a mensagem em maiúsculas para o endereço do cliente.
-O cliente usa settimeout, pois o UDP não garante a entrega.
-Aplicação TCP (TCP/TCPServerT1.py e TCP/TCPClientT1.py)
-Socket SOCK_STREAM, com listen, accept (um socket dedicado por cliente), send e recv.
-Mensagens trafegam cifradas com uma cifra de César (chave 3): o servidor decifra, inverte o texto e responde cifrado. A cifra tem finalidade didática, pois é trivial de quebrar.
-Robustez
-Timeouts no cliente e no servidor.
-Tratamento de conexão recusada e de conexão interrompida pelo cliente.
-Bytes inválidos não derrubam o servidor.
-Encerramento limpo com Ctrl+C.
-Docker (TCP/Dockerfile): imagem para executar o servidor TCP.
-Como executar (Python 3, sem dependências externas):
+## Objetivos
 
-# em dois terminais diferentes, na raiz do repositório
-python3 UDP/UDPServerT1.py     # e depois: python3 UDP/UDPClientT1.py
-python3 TCP/TCPServerT1.py     # e depois: python3 TCP/TCPClientT1.py
+* Implementar uma comunicação cliente-servidor utilizando UDP.
+* Implementar uma comunicação cliente-servidor utilizando TCP.
+* Praticar a criação, configuração e utilização de sockets.
+* Demonstrar o envio e recebimento de mensagens entre cliente e servidor.
+* Utilizar uma cifra de César para cifrar e decifrar as mensagens.
 
-# servidor TCP com Docker (dentro da pasta TCP/)
-docker build -t tcp-1215 .
-docker run -d --name tcp1215 --restart unless-stopped -p 1215:1215 tcp-1215
+## Estrutura do projeto
 
-Nos clientes, serverName é 127.0.0.1 para testes locais e 10.0.99.150 para o servidor da turma.
+```text
+TCP/
+├── ClientTCP/
+│   ├── CifraCesar.py
+│   ├── TCPClientComplete.py
+│   ├── TCPClientKUROSE.py
+│   ├── TCPClientT1.py
+│   └── ...
+└── ServerTCP/
+    ├── CifraCesar.py
+    ├── TCPServerComplete.py
+    ├── TCPServerKUROSE.py
+    ├── TCPServerT1.py
+    └── ...
 
-Tecnologias Utilizadas
-Python (biblioteca padrão socket)
-Sockets UDP e TCP
-Docker
-Git
-GitHub
-Conceitos de Cibersegurança (cifra de César, robustez de serviços de rede)
+UDP/
+├── UDPClient/
+│   ├── CifraCesar.py
+│   ├── UDPClientComplete.py
+│   ├── UDPClientKUROSE.py
+│   ├── UDPClientT1.py
+│   └── ...
+└── UDPServer/
+    ├── CifraCesar.py
+    ├── UDPServerComplete.py
+    ├── UDPServerKUROSE.py
+    ├── UDPServerT1.py
+    └── ...
+```
 
-Desenvolvido durante o curso de Bacharelado em Cibersegurança - UFU.
+## Aplicação UDP
+
+A aplicação UDP utiliza:
+
+* `socket.AF_INET`
+* `socket.SOCK_DGRAM`
+* `bind()`
+* `sendto()`
+* `recvfrom()`
+
+O cliente envia uma mensagem cifrada para o servidor.
+
+O servidor:
+
+1. recebe a mensagem;
+2. decifra utilizando a cifra de César;
+3. inverte a mensagem;
+4. cifra novamente;
+5. envia a resposta ao cliente.
+
+### Executando o UDP
+
+Na raiz do repositório, abra dois terminais.
+
+**Terminal 1 - servidor UDP:**
+
+```bash
+python3 UDP/UDPServer/UDPServerComplete.py
+```
+
+**Terminal 2 - cliente UDP:**
+
+```bash
+python3 UDP/UDPClient/UDPClientComplete.py
+```
+
+## Aplicação TCP
+
+A aplicação TCP utiliza:
+
+* `socket.AF_INET`
+* `socket.SOCK_STREAM`
+* `bind()`
+* `listen()`
+* `accept()`
+* `connect()`
+* `send()`
+* `recv()`
+
+O cliente estabelece uma conexão com o servidor e envia uma mensagem cifrada.
+
+O servidor:
+
+1. aceita a conexão;
+2. recebe a mensagem;
+3. decifra a mensagem;
+4. inverte o texto;
+5. cifra novamente;
+6. envia a resposta ao cliente.
+
+### Executando o TCP
+
+Na raiz do repositório, abra dois terminais.
+
+**Terminal 1 - servidor TCP:**
+
+```bash
+python3 TCP/ServerTCP/TCPServerComplete.py
+```
+
+**Terminal 2 - cliente TCP:**
+
+```bash
+python3 TCP/ClientTCP/TCPClientComplete.py
+```
+
+## Cifra de César
+
+As mensagens utilizadas na comunicação são cifradas com uma cifra de César.
+
+A implementação está no arquivo:
+
+```text
+CifraCesar.py
+```
+
+A cifra preserva letras maiúsculas e minúsculas e mantém espaços, números e outros caracteres sem alteração.
+
+## Porta
+
+A aplicação utiliza a porta:
+
+```text
+1215
+```
+
+Essa porta deve corresponder ao valor definido no enunciado da atividade.
+
+## Testes
+
+As aplicações TCP e UDP foram executadas localmente utilizando:
+
+```text
+127.0.0.1
+```
+
+Os testes demonstraram o envio e recebimento das mensagens entre cliente e servidor.
+
+## Tecnologias
+
+* Python 3
+* Biblioteca `socket`
+* Git
+* GitHub
+
+## Atividade
+
+Universidade Federal de Uberlândia - UFU
+
+Curso de Cibersegurança
+
+1ª Atividade Avaliativa - 2026/2
